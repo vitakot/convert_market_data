@@ -1,2 +1,2 @@
-# market_data_converter
+# Convert Market Data
 Tool for converting market data from various providers to Zorro .t6 format
