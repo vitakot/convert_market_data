@@ -1,29 +1,21 @@
 /*
-Market Data Converter
-https://github.com/vitakot/market_data_converter
+Convert Market Data
+https://github.com/vitakot/convert_market_data
 
 Licensed under the MIT License <http://opensource.org/licenses/MIT>.
 SPDX-License-Identifier: MIT
 Copyright (c) 2021 Vitezslav Kot <vitezslav.kot@gmail.com>.
 */
 
-#ifndef YAHOO_TO_ZORRO_CONVERTER_H
-#define YAHOO_TO_ZORRO_CONVERTER_H
+#ifndef OANDA_TO_ZORRO_CONVERTER_H
+#define OANDA_TO_ZORRO_CONVERTER_H
 
+#include "converter.h"
+#include "types.h"
 #include <string>
 #include <vector>
 
-struct Bar {
-    std::string m_date;
-    std::string m_time = "00:00:00";
-    double m_open = 0.0;
-    double m_high = 0.0;
-    double m_low = 0.0;
-    double m_close = 0.0;
-    std::int64_t m_volume = 0.0;
-};
-
-class YahooToZorroConverter {
+class OandaToZorroConverter : public Converter {
 
     static bool loadJsonResponse(const std::string &path, std::vector<Bar> &bars);
 
@@ -31,8 +23,8 @@ class YahooToZorroConverter {
 
 public:
 
-    static bool convert(const std::string &oandaFilePath, const std::string &csvFilePath);
+    bool convert(const std::string &inPath, const std::string &outPath) override;
 };
 
 
-#endif // YAHOO_TO_ZORRO_CONVERTER_H
+#endif // OANDA_TO_ZORRO_CONVERTER_H

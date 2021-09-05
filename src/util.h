@@ -1,6 +1,6 @@
 /*
-Market Data Converter
-https://github.com/vitakot/market_data_converter
+Convert Market Data
+https://github.com/vitakot/convert_market_data
 
 Licensed under the MIT License <http://opensource.org/licenses/MIT>.
 SPDX-License-Identifier: MIT
@@ -11,13 +11,14 @@ Copyright (c) 2021 Vitezslav Kot <vitezslav.kot@gmail.com>.
 #define GET_MARKET_DATA_UTIL_H
 
 #include <sstream>
+#include <nlohmann/json.hpp>
 
 static const int SECONDS_PER_MINUTE = 60;
 static const int SECONDS_PER_HOUR = 3600;
 static const int SECONDS_PER_DAY = 86400;
 static const int DAYS_OF_MONTH[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
-bool isLeapYear(short year) {
+static bool isLeapYear(short year) {
     if (year % 4 != 0) return false;
     if (year % 100 != 0) return true;
     return (year % 400) == 0;
@@ -44,7 +45,7 @@ static time_t mkgmtime(const struct tm *ptm) {
     return secs;
 }
 
-std::vector<std::string> splitString(const std::string &s, char delim) {
+static std::vector<std::string> splitString(const std::string &s, char delim) {
 
     std::stringstream ss(s);
     std::string item;

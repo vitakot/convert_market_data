@@ -1,36 +1,22 @@
 /*
-Market Data Converter
-https://github.com/vitakot/market_data_converter
+Convert Market Data
+https://github.com/vitakot/convert_market_data
 
 Licensed under the MIT License <http://opensource.org/licenses/MIT>.
 SPDX-License-Identifier: MIT
 Copyright (c) 2021 Vitezslav Kot <vitezslav.kot@gmail.com>.
 */
 
+#include "nlohmann/json.hpp"
+#include "oanda_to_zorro_converter.h"
+#include "util.h"
 #include <fstream>
 #include <iostream>
-#include <ctime>
 #include <iomanip>
-#include "YahooToZorroConverter.h"
-#include "nlohmann/json.hpp"
 
 const bool OMIT_TIME = true;
 
-template<typename ValueType>
-bool readValue(const nlohmann::json &json, const std::string &key, ValueType &value) {
-    nlohmann::json::const_iterator it;
-
-    it = json.find(key);
-
-    if (it != json.end()) {
-        value = it.value();
-        return true;
-
-    }
-    return false;
-}
-
-bool YahooToZorroConverter::loadJsonResponse(const std::string &path, std::vector<Bar> &bars) {
+bool OandaToZorroConverter::loadJsonResponse(const std::string &path, std::vector<Bar> &bars) {
 
     std::ifstream ifs(path);
 
@@ -43,7 +29,7 @@ bool YahooToZorroConverter::loadJsonResponse(const std::string &path, std::vecto
         nlohmann::json json = nlohmann::json::parse(ifs);
         const auto candles = json["candles"];
 
-        for (const auto &candle : candles) {
+        for (const auto &candle: candles) {
 
             Bar newBar;
 
@@ -85,16 +71,17 @@ bool YahooToZorroConverter::loadJsonResponse(const std::string &path, std::vecto
     }
 }
 
-bool YahooToZorroConverter::saveBarsToCSVFile(const std::string &path, const std::vector<Bar> &bars) {
+bool OandaToZorroConverter::saveBarsToCSVFile(const std::string &path, const std::vector<Bar> &bars) {
 
     std::ofstream file(path);
 
     if (file.is_open()) {
 
-        for (const auto &bar : bars) {
+        for (const auto &bar: bars) {
             file << std::fixed;
             file << std::setprecision(2);
-            file << bar.m_date << "," << bar.m_time << ","<< bar.m_open << "," << bar.m_high << "," << bar.m_low << "," << bar.m_close
+            file << bar.m_date << "," << bar.m_time << "," << bar.m_open << "," << bar.m_high << "," << bar.m_low << ","
+                 << bar.m_close
                  << "," << bar.m_volume << std::endl;
         }
 
@@ -103,13 +90,13 @@ bool YahooToZorroConverter::saveBarsToCSVFile(const std::string &path, const std
     return false;
 }
 
-bool YahooToZorroConverter::convert(const std::string &oandaFilePath, const std::string &csvFilePath) {
-
+bool OandaToZorroConverter::convert(const std::string &inPath, const std::string &outPath) {
     std::vector<Bar> bars;
 
-    if (loadJsonResponse(oandaFilePath, bars)) {
-        return saveBarsToCSVFile(csvFilePath, bars);
+    if (loadJsonResponse(inPath, bars)) {
+        return saveBarsToCSVFile(outPath, bars);
     }
 
     return false;
+
 }
