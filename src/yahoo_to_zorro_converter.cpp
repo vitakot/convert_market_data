@@ -23,7 +23,7 @@ bool YahooToZorroConverter::loadCSVFile(const std::string &path, std::vector<Bar
     Bar lastValidBar;
 
     if (!ifs.is_open()) {
-        std::cerr << "Couldn't open json file" << std::endl;
+        std::cerr << "Couldn't open csv file" << std::endl;
         return false;
     }
 
@@ -73,7 +73,9 @@ bool YahooToZorroConverter::loadCSVFile(const std::string &path, std::vector<Bar
 
     return true;
 }
-
+/*
+ * Trade
+ */
 bool YahooToZorroConverter::saveBarsToCSVFile(const std::string &path, const std::vector<Bar> &bars) {
 
     std::ofstream file(path);
@@ -82,7 +84,7 @@ bool YahooToZorroConverter::saveBarsToCSVFile(const std::string &path, const std
 
         for (const auto &bar: bars) {
             file << std::fixed;
-            file << std::setprecision(2);
+            file << std::setprecision(5);
             file << bar.m_date << "," << bar.m_time << "," << bar.m_open << "," << bar.m_high << "," << bar.m_low << ","
                  << bar.m_close
                  << "," << bar.m_volume << std::endl;
